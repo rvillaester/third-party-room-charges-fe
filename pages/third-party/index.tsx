@@ -15,10 +15,6 @@ export default function ThirdParty() {
     dataIndex: 'customerNumber',
     key: 'customerNumber',
   }, {
-    title: 'Third Party',
-    dataIndex: 'thirdPartyNumber',
-    key: 'thirdPartyNumber',
-  }, {
     title: 'Date',
     dataIndex: 'date',
     key: 'date',

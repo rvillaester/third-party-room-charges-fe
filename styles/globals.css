@@ -15,7 +15,26 @@ a {
   box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
+.third-party-table .filters {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.third-party-table .filters .searchbox {
+  display: flex;
+}
+
+.associates-table .filters {
+  margin-bottom: 10px;
+}
+
+.associates-table .filters .searchbox {
+  display: flex;
+}
+
+
+/* @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
@@ -23,4 +42,4 @@ a {
     color: white;
     background: black;
   }
-}
+} */

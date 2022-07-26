@@ -29,7 +29,7 @@ const MainNavigation: React.FC<{}> = () => {
 
   return (
     <header className={classes.header}>
-      <div className={classes.logo}>Welcome to Next.js Demo!</div>
+      <div className={classes.logo}>Associates</div>
       <nav>
         <ul>
           <li>

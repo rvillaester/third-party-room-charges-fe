@@ -1,0 +1,63 @@
+.header {
+    width: 100%;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #007377;
+    padding: 0 10%;
+  }
+  
+  .logo {
+    font-size: 2rem;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .greeting {
+    font-size: 1rem;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .header ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: baseline;
+  }
+  
+  .header li {
+    margin-left: 1rem;
+  }
+
+  .header li a{
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+  .header a {
+    text-decoration: none;
+    font-size: 1.5rem;
+    /* color: #fcb8d2; */
+    color: #6dff99;
+  }
+  
+  .header a:hover,
+  .header a:active,
+  .header a.active {
+    color: white;
+  /* color: #0070f3; */
+  }
+  
+  .actions button {
+    font: inherit;
+    cursor: pointer;
+    background-color: #3010bd;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border: 1px solid #3010bd;
+    border-radius: 4px;
+    font-weight: bold;
+  }

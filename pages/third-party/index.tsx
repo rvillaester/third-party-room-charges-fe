@@ -201,6 +201,10 @@ export default function ThirdParty() {
               <Input placeholder="Customer #" />
             </Form.Item>
 
+            <Form.Item label="Reference Number">
+              <Input placeholder="Reference #" />
+            </Form.Item>
+
             <Form.Item label="Amount">
               <Input placeholder="Amount" />
             </Form.Item>

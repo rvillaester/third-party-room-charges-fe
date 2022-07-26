@@ -26,6 +26,8 @@ a {
 }
 
 .associates-table .filters {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 10px;
 }
 

@@ -99,21 +99,19 @@ export default function ThirdParty() {
 
   const handleSearchHotel = () => {
 
-    const filterData = dataSource.filter((value: any) => value.hotelName === searchHotelText)
-
     if (!searchHotelText) {
       setFilterDataSource(dataSource)
     } else {
+      const filterData = dataSource.filter((value: any) => value.hotelName === searchHotelText)
       const responseData = filterData.length ? filterData : []
 
-    console.log('responseData', responseData)
+      console.log('responseData', responseData)
 
-    setFilterDataSource(responseData)
+      setFilterDataSource(responseData)
     }
 
     setSearchHotelText('')
-    
-
+  
   }
 
   const handleShowModal = () => {

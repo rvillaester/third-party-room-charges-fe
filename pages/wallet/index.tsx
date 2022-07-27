@@ -10,14 +10,6 @@ import styles from '../../styles/Home.module.css'
 export default function Home() {
   const [ form ] = Form.useForm();
 
-  const defaultValues ={
-    firstName: null,
-    lastName: null,
-    validTo: null,
-    hotelId: null,
-    roomNumber: null,
-  }
-
   const columns = [{
     title: 'First Name',
     dataIndex: 'firstName',
@@ -81,11 +73,11 @@ export default function Home() {
 
   const handleCreateWallet = (values: any) => {
 
+    const hotelId = localStorage.getItem('hotelId')
+
     axiosInstance.post('/wallet/create', {
-      firstname: 'John',
-      lastname: 'Go',
-      validTo: '2023-01-21',
-      roomNumber: '23-B',
+      ...values,
+      hotelId,
     }).then(response => {
 
       console.log('response', response)
@@ -110,14 +102,16 @@ export default function Home() {
 
   const handleCloseModal = () => {
     setTabs('form')
+    form.resetFields()
     setIsModalVisible(false)
   
   }
 
   React.useEffect(() => {
+    const hotelId = localStorage.getItem('hotelId')
     axiosInstance
       .post('/wallet/fetch', {
-        "hotelId": "H-234432",
+        hotelId,
         "active": true
       })
       .then(response => {
@@ -193,16 +187,12 @@ export default function Home() {
               <Input placeholder="Valid To" />
             </Form.Item>
 
-            <Form.Item name="hotelId" label="Hotel ID" rules={[{ required: true }]}>
-              <Input placeholder="Hotel ID" />
-            </Form.Item>
-
             <Form.Item name="roomNumber" label="Room Number" rules={[{ required: true }]}>
               <Input placeholder="Room Number" />
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit" onClick={handleCreateWallet} className="submit-transaction-button">Submit</Button>
+              <Button type="primary" htmlType="submit" className="submit-transaction-button">Submit</Button>
             </Form.Item>
 
           </Form>

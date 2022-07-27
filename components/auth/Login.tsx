@@ -46,7 +46,13 @@ const Login: React.FC<{}> = () => {
                 localStorage.setItem('partnerName', partnerName);
 
             }
-            router.push('/');
+
+            if(username === 'hotel') {
+                router.push('/');
+            } else {
+                router.push('/third-party')
+            }
+
         }
     };
 

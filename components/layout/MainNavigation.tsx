@@ -25,7 +25,7 @@ const MainNavigation: React.FC<{}> = () => {
 
   const onLogoutHandler = () => {
     localStorage.setItem('status', 'not-authenticated');
-    router.push('/');
+    router.push('/auth');
   };
 
   return (

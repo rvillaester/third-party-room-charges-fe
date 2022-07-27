@@ -4,6 +4,7 @@ import Input from 'antd/lib/input'
 import Button from 'antd/lib/button'
 import Modal from 'antd/lib/modal'
 import Form from 'antd/lib/form'
+import Result from 'antd/lib/result'
 import { axiosInstance } from '../../common/axios'
 import styles from '../../styles/Home.module.css'
 
@@ -19,9 +20,9 @@ export default function ThirdParty() {
     dataIndex: 'pk',
     key: 'pk',
   }, {
-    title: 'Partner ID',
-    dataIndex: 'partnerId',
-    key: 'partnerId',
+    title: 'Hotel ID',
+    dataIndex: 'hotelId',
+    key: 'hotelId',
   }, {
     title: 'Date',
     dataIndex: 'date',
@@ -47,6 +48,7 @@ export default function ThirdParty() {
   const [ searchCustomerText, setSearchCustomerText ] = React.useState('')
   const [ searchHotelText, setSearchHotelText ] = React.useState('')
   const [ dataSource, setDataSource ] = React.useState([])
+  const [ tabs, setTabs ] = React.useState('form')
 
   const [ filterDataSoure, setFilterDataSource ] = React.useState(dataSource)
 
@@ -109,20 +111,32 @@ export default function ThirdParty() {
   
   }
 
-  const handleCreateTransaction = () => {
-    setIsModalVisible(false)
-  }
-
   const handleCloseModal = () => {
+
+    setTabs('form')
+
+    form.resetFields()
 
     setIsModalVisible(false)
   
   }
 
-  const handleSubmitCapture = (response: any) => {
-    console.log('response', response)
+  const handleSubmitCapture = (values: any) => {
+    console.log('values', values)
 
-    setIsModalVisible(false)
+    const partnerId = localStorage.getItem('partnerId')
+
+    axiosInstance.post('/transaction/create', {
+      ...values,
+      partnerId,
+    }).then(response => {
+      setTabs('success')
+    }).catch(error => {
+      console.log('error', error)
+      setTabs('form')
+      setIsModalVisible(false)
+    })
+
 
   }
 
@@ -193,37 +207,48 @@ export default function ThirdParty() {
           onCancel={handleCloseModal}
           footer={[]}
         >
-          <Form
+          {tabs === 'form' && (
+            <Form
             form={form}
             layout="vertical"
-            onSubmitCapture={handleSubmitCapture}
+            onFinish={handleSubmitCapture}
           >
             
-            <Form.Item label="Hotel">
-              <Input placeholder="hotel" />
+            <Form.Item name="hotelId" label="Hotel ID">
+              <Input placeholder="Hotel ID" />
             </Form.Item>
 
-            <Form.Item label="Customer Number">
+            <Form.Item name="customerNumber" label="Customer Number">
               <Input placeholder="Customer #" />
             </Form.Item>
 
-            <Form.Item label="Reference Number">
-              <Input placeholder="Reference #" />
+            <Form.Item name="receiptNumber" label="Receipt Number">
+              <Input placeholder="Receipt #" />
             </Form.Item>
 
-            <Form.Item label="Amount">
+            <Form.Item name="amount" label="Amount">
               <Input placeholder="Amount" />
             </Form.Item>
 
-            <Form.Item label="Description">
-              <Input placeholder="description" />
+            <Form.Item name="detail" label="Detail">
+              <Input placeholder="Detail" />
             </Form.Item>
 
             <Form.Item>
-              <Button className="submit-transaction-button" type="primary">Submit</Button>
+              <Button className="submit-transaction-button" htmlType="submit" type="primary">Submit</Button>
             </Form.Item>
 
           </Form>
+          )}
+
+          {tabs === 'success' && (
+            <Result
+              status="success"
+              title="Successful transaction"
+              subTitle="Successfully created the transaction"
+            />
+          )}
+          
         </Modal>
       </main>
     </div>

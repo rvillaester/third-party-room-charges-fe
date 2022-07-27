@@ -4,6 +4,7 @@ import Input from 'antd/lib/input'
 import Button from 'antd/lib/button'
 import Modal from 'antd/lib/modal'
 import Form from 'antd/lib/form'
+import QRCode from 'react-qr-code'
 import { axiosInstance } from '../../common/axios'
 import styles from '../../styles/Home.module.css'
 
@@ -47,6 +48,7 @@ export default function Home() {
   const [ searchText, setSearchText ] = React.useState('')
   const [ tabs, setTabs ] = React.useState('form')
   const [ dataSource, setDataSource ] = React.useState([])
+  const [ qrValue, setQrValue ] = React.useState('')
 
   const [ filterDataSoure, setFilterDataSource ] = React.useState(dataSource)
   const [isModalVisible, setIsModalVisible] = React.useState(false)
@@ -81,7 +83,9 @@ export default function Home() {
     }).then(response => {
 
       console.log('response', response)
+      
       setTabs('qr')
+      setQrValue(JSON.stringify(response.data))
       // setIsModalVisible(false)
 
     }).catch(error => {
@@ -104,6 +108,25 @@ export default function Home() {
     setTabs('form')
     form.resetFields()
     setIsModalVisible(false)
+    setQrValue('')
+
+    const hotelId = localStorage.getItem('hotelId')
+    axiosInstance
+      .post('/wallet/fetch', {
+        hotelId,
+        "active": true
+      })
+      .then(response => {
+
+        console.log('response', response)
+
+        setDataSource(response.data.wallets || [])
+
+      }).catch(error => {
+
+        console.log('error', error)
+
+      })
   
   }
 
@@ -134,10 +157,12 @@ export default function Home() {
   }, [dataSource])
 
 
+  const hotelName = typeof localStorage !== 'undefined' ? localStorage.getItem('hotelName') : ''
+
   return (
     <div className={styles.container}>
       <main className="associates-table">
-        <h1>Hotel</h1>
+        <h1>{hotelName}</h1>
         <div className="filters">
 
           <div className="searchbox">
@@ -198,9 +223,11 @@ export default function Home() {
           </Form>
           )}
           {
-            tabs === 'qr' && (
-              <div>
-                <img className="qr-code" src="/qr-code.png" />
+            (tabs === 'qr' && qrValue) && (
+              <div style={{ 'textAlign': "center"}}>
+                <QRCode
+                  value={qrValue}
+                />
 
                 <div className="success-qr">Successfully created a wallet!</div>
               </div>

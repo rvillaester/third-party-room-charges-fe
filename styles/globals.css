@@ -55,6 +55,10 @@ a {
   text-align: center;
 }
 
+.button-scan {
+  margin-bottom: 20px;
+}
+
 
 
 /* @media (prefers-color-scheme: dark) {

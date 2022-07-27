@@ -1,4 +1,5 @@
 import React from 'react'
+import { QrReader } from 'react-qr-reader'
 import Table from 'antd/lib/table'
 import Input from 'antd/lib/input'
 import Button from 'antd/lib/button'
@@ -12,9 +13,9 @@ export default function ThirdParty() {
   const [ form ] = Form.useForm();
 
   const columns = [{
-    title: 'Customer Number',
-    dataIndex: 'customerNumber',
-    key: 'customerNumber',
+    title: 'Wallet ID',
+    dataIndex: 'walletId',
+    key: 'walletId',
   }, {
     title: 'Transaction ID',
     dataIndex: 'pk',
@@ -118,6 +119,20 @@ export default function ThirdParty() {
     form.resetFields()
 
     setIsModalVisible(false)
+
+    axiosInstance
+      .post('/transaction/fetch', {})
+      .then(response => {
+
+        console.log('response', response)
+
+        setDataSource(response.data.transactions)
+
+      }).catch(error => {
+
+        console.log('error', error)
+
+      })
   
   }
 
@@ -138,6 +153,20 @@ export default function ThirdParty() {
     })
 
 
+  }
+
+  const handleQrResult = (result: any, error: any) => {
+
+    if(result) {
+      console.log('resultqr', result)
+    } else {
+      console.log('errorqr', error)
+    }
+    
+  }
+
+  const handleScanQr = () => {
+    setTabs('qr')
   }
 
   React.useEffect(() => {
@@ -162,15 +191,16 @@ export default function ThirdParty() {
 
   }, [dataSource])
 
+  const partnerName = typeof localStorage !== 'undefined' ? localStorage.getItem('partnerName') : ''
 
   return (
     <div className={styles.container}>
       <main className="third-party-table">
-        <h1>Third Party Store</h1>
+        <h1>{partnerName}</h1>
         <div className="filters">
           <div className="searchbox">
             <Input
-              placeholder="Customer Number"
+              placeholder="Wallet ID"
               onPressEnter={handleSearchCustomer}
               onChange={handleSearchCustomerTextValue}
               value={searchCustomerText}
@@ -208,38 +238,52 @@ export default function ThirdParty() {
           footer={[]}
         >
           {tabs === 'form' && (
-            <Form
-            form={form}
-            layout="vertical"
-            onFinish={handleSubmitCapture}
-          >
-            
-            <Form.Item name="hotelId" label="Hotel ID">
-              <Input placeholder="Hotel ID" />
-            </Form.Item>
+            <React.Fragment>
+              <Button className="button-scan" type="primary" onClick={handleScanQr}>
+                Scan QR Code
+              </Button>
+              <Form
+              form={form}
+              layout="vertical"
+              onFinish={handleSubmitCapture}
+            >
+              
+              <Form.Item name="hotelId" label="Hotel ID" rules={[{ required: true }]}>
+                <Input placeholder="Hotel ID" />
+              </Form.Item>
 
-            <Form.Item name="customerNumber" label="Customer Number">
-              <Input placeholder="Customer #" />
-            </Form.Item>
+              <Form.Item name="walletId" label="Wallet ID" rules={[{ required: true }]}>
+                <Input placeholder="Wallet ID" />
+              </Form.Item>
 
-            <Form.Item name="receiptNumber" label="Receipt Number">
-              <Input placeholder="Receipt #" />
-            </Form.Item>
+              <Form.Item name="receiptNumber" label="Receipt Number" rules={[{ required: true }]}>
+                <Input placeholder="Receipt #" />
+              </Form.Item>
 
-            <Form.Item name="amount" label="Amount">
-              <Input placeholder="Amount" />
-            </Form.Item>
+              <Form.Item name="amount" label="Amount" rules={[{ required: true }]}>
+                <Input placeholder="Amount" />
+              </Form.Item>
 
-            <Form.Item name="detail" label="Detail">
-              <Input placeholder="Detail" />
-            </Form.Item>
+              <Form.Item name="detail" label="Detail">
+                <Input placeholder="Detail" />
+              </Form.Item>
 
-            <Form.Item>
-              <Button className="submit-transaction-button" htmlType="submit" type="primary">Submit</Button>
-            </Form.Item>
+              <Form.Item>
+                <Button className="submit-transaction-button" htmlType="submit" type="primary">Submit</Button>
+              </Form.Item>
 
-          </Form>
+            </Form>
+          </React.Fragment>
           )}
+
+          {
+            tabs === 'qr' && (
+              <QrReader
+                onResult={handleQrResult}
+                constraints={{ facingMode: 'user' }}
+              />
+            )
+          }
 
           {tabs === 'success' && (
             <Result

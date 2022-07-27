@@ -30,7 +30,7 @@ const MainNavigation: React.FC<{}> = () => {
 
   return (
     <header className={classes.header}>
-      <div className={classes.logo}>Associates</div>
+      <div className={classes.logo}>SiteMinder Associates</div>
       <nav>
         <ul>
           <li>

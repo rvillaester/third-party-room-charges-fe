@@ -1,4 +1,5 @@
 import React from 'react'
+import { useRouter } from 'next/router';
 import Table from 'antd/lib/table'
 import Input from 'antd/lib/input'
 import Button from 'antd/lib/button'
@@ -6,10 +7,12 @@ import { axiosInstance } from '../common/axios'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
+  const router = useRouter()
+
   const columns = [{
-    title: 'Customer Number',
-    dataIndex: 'customerNumber',
-    key: 'customerNumber',
+    title: 'Wallet ID',
+    dataIndex: 'walletId',
+    key: 'walletId',
   }, {
     title: 'Transaction ID',
     dataIndex: 'pk',
@@ -65,6 +68,10 @@ export default function Home() {
 
   }
 
+  const handleRedirectToWallet = () => {
+    router.push('/wallet')
+  }
+
   React.useEffect(() => {
     axiosInstance
       .post('/transaction/fetch', {})
@@ -88,10 +95,12 @@ export default function Home() {
   }, [dataSource])
 
 
+  const hotelName = typeof localStorage !== 'undefined' ? localStorage.getItem('hotelName') : ''
+
   return (
     <div className={styles.container}>
       <main className="associates-table">
-        <h1>Hotel</h1>
+        <h1>{hotelName}</h1>
         <div className="filters">
 
           <div className="searchbox">
@@ -102,6 +111,12 @@ export default function Home() {
             />
             <Button onClick={handleSearch}>
               Search
+            </Button>
+          </div>
+
+          <div className="transaction-content">
+            <Button type="primary" onClick={handleRedirectToWallet}>
+              Go to Wallet
             </Button>
           </div>
 

@@ -35,8 +35,24 @@ a {
   width: 100%;
 }
 
+.wallet-modal .submit-transaction-button {
+  width: 100%;
+}
+
+.transaction-modal .submit-transaction-button {
+  width: 100%;
+}
+
 .associates-table .filters .searchbox {
   display: flex;
+}
+
+.qr-code {
+  width: -webkit-fill-available;
+}
+
+.success-qr {
+  text-align: center;
 }
 
 

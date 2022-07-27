@@ -4,7 +4,7 @@ import Input from 'antd/lib/input'
 import Button from 'antd/lib/button'
 import Modal from 'antd/lib/modal'
 import Form from 'antd/lib/form'
-import { Axios } from '../../common/axios'
+import { axiosInstance } from '../../common/axios'
 import styles from '../../styles/Home.module.css'
 
 export default function ThirdParty() {
@@ -15,6 +15,14 @@ export default function ThirdParty() {
     dataIndex: 'customerNumber',
     key: 'customerNumber',
   }, {
+    title: 'Transaction ID',
+    dataIndex: 'pk',
+    key: 'pk',
+  }, {
+    title: 'Partner ID',
+    dataIndex: 'partnerId',
+    key: 'partnerId',
+  }, {
     title: 'Date',
     dataIndex: 'date',
     key: 'date',
@@ -24,40 +32,21 @@ export default function ThirdParty() {
     key: 'amount',
   }, {
     title: 'Details',
-    dataIndex: 'details',
-    key: 'details',
+    dataIndex: 'detail',
+    key: 'detail',
   }, {
-  }, {
-    title: 'Hotel Name',
-    dataIndex: 'hotelName',
-    key: 'hotelName',
+    title: 'Receipt Number',
+    dataIndex: 'receiptNumber',
+    key: 'receiptNumber',
   }, {
     title: 'Payment Status',
-    dataIndex: 'paymentStatus',
-    key: 'paymentStatus',
+    dataIndex: 'status',
+    key: 'status',
   }]
 
   const [ searchCustomerText, setSearchCustomerText ] = React.useState('')
   const [ searchHotelText, setSearchHotelText ] = React.useState('')
-  const [ dataSource ] = React.useState([{
-    customerNumber: 'cn123',
-    thirdPartyNumber: 'tpn123',
-    date: '10/11/2022',
-    amount: 1234.56,
-    hotelId: 'asd123',
-    hotelName: 'Test Hotel',
-    details: <Button>Details</Button>,
-    paymentStatus: 'Pending',
-  }, {
-    customerNumber: 'cn1234',
-    thirdPartyNumber: 'tpn1234',
-    date: '10/11/2022',
-    amount: 1234.567,
-    hotelId: 'asd123',
-    hotelName: 'Test Hotel',
-    details: <Button>Details</Button>,
-    paymentStatus: 'Pending',
-  }])
+  const [ dataSource, setDataSource ] = React.useState([])
 
   const [ filterDataSoure, setFilterDataSource ] = React.useState(dataSource)
 
@@ -124,12 +113,27 @@ export default function ThirdParty() {
     setIsModalVisible(false)
   }
 
+  const handleCloseModal = () => {
+
+    setIsModalVisible(false)
+  
+  }
+
+  const handleSubmitCapture = (response: any) => {
+    console.log('response', response)
+
+    setIsModalVisible(false)
+
+  }
+
   React.useEffect(() => {
-    Axios()
-      .get('/test')
+    axiosInstance
+      .post('/transaction/fetch', {})
       .then(response => {
 
         console.log('response', response)
+
+        setDataSource(response.data.transactions)
 
       }).catch(error => {
 
@@ -137,6 +141,12 @@ export default function ThirdParty() {
 
       })
   }, [])
+
+  React.useEffect(() => {
+
+    setFilterDataSource(dataSource)
+
+  }, [dataSource])
 
 
   return (
@@ -178,13 +188,15 @@ export default function ThirdParty() {
         <Table dataSource={filterDataSoure} columns={columns} />
         <Modal
           title="Create Transaction"
+          className="transaction-modal"
           visible={isModalVisible}
-          onCancel={handleCreateTransaction}
+          onCancel={handleCloseModal}
           footer={[]}
         >
           <Form
             form={form}
             layout="vertical"
+            onSubmitCapture={handleSubmitCapture}
           >
             
             <Form.Item label="Hotel">
@@ -208,7 +220,7 @@ export default function ThirdParty() {
             </Form.Item>
 
             <Form.Item>
-              <Button style={{ width: '100%' }} type="primary">Submit</Button>
+              <Button className="submit-transaction-button" type="primary">Submit</Button>
             </Form.Item>
 
           </Form>

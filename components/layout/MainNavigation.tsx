@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { isAuthenticated } from "../../common/appUtil";
 import { getCookie, removeCookie, setCookie } from "../../common/cookieUtil";
 import classes from "./MainNavigation.module.css";
 
@@ -7,6 +9,8 @@ const MainNavigation: React.FC<{}> = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   let isLoggedInKey = 'isLoggedIn';
+
+  const router = useRouter()
 
   useEffect(() => {
     let isLoggedInCookie = getCookie(isLoggedInKey);
@@ -16,15 +20,12 @@ const MainNavigation: React.FC<{}> = () => {
   }, [isLoggedIn]);
 
   const onLoginHandler = () => {
-    setCookie('isLoggedIn', 'true', 1000);
-    setIsLoggedIn(true);
-    window.location.reload();
+    router.push('/auth')
   };
 
   const onLogoutHandler = () => {
-    removeCookie('isLoggedIn');
-    setIsLoggedIn(false);
-    window.location.reload();
+    localStorage.setItem('status', 'not-authenticated');
+    router.push('/');
   };
 
   return (
@@ -35,19 +36,19 @@ const MainNavigation: React.FC<{}> = () => {
           <li>
             <Link href="/">Home</Link>
           </li>
-          {!isLoggedIn && (
+          {!isAuthenticated() && (
             <li>
               <a onClick={onLoginHandler}>Login</a>
             </li>
           )}
-          {isLoggedIn && (
+          {isAuthenticated() && (
             <li>
               <a onClick={onLogoutHandler}>Logout</a>
             </li>
           )}
         </ul>
       </nav>
-    </header>
+    </header> 
   );
 };
 

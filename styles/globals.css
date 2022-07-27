@@ -31,9 +31,14 @@ a {
   margin-bottom: 10px;
 }
 
+.third-party-table .submit-transaction-button {
+  width: 100%;
+}
+
 .associates-table .filters .searchbox {
   display: flex;
 }
+
 
 
 /* @media (prefers-color-scheme: dark) {

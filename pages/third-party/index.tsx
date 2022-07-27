@@ -208,7 +208,7 @@ export default function ThirdParty() {
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary">Submit</Button>
+              <Button style={{ width: '100%' }} type="primary">Submit</Button>
             </Form.Item>
 
           </Form>

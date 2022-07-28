@@ -12,33 +12,25 @@ export default function Home() {
   const [ form ] = Form.useForm();
 
   const columns = [{
+    title: 'Wallet ID',
+    dataIndex: 'pk',
+    key: 'pk',
+  }, {
     title: 'First Name',
     dataIndex: 'firstName',
     key: 'firstName',
-  }, {
-    title: 'Hotel ID',
-    dataIndex: 'hotelId',
-    key: 'hotelId',
-  }, {
-    title: 'Date',
-    dataIndex: 'date',
-    key: 'date',
   }, {
     title: 'Last Name',
     dataIndex: 'lastName',
     key: 'lastName',
   }, {
-    title: 'Wallet ID',
-    dataIndex: 'pk',
-    key: 'pk',
-  }, {
     title: 'Room Number',
     dataIndex: 'roomNumber',
     key: 'roomNumber',
   }, {
-    title: 'Type',
-    dataIndex: 'type',
-    key: 'type',
+    title: 'Valid From',
+    dataIndex: 'date',
+    key: 'date',
   }, {
     title: 'Valid To',
     dataIndex: 'validTo',

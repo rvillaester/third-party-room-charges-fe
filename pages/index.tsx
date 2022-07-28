@@ -105,7 +105,7 @@ export default function Home() {
 
           <div className="searchbox">
             <Input
-              placeholder="Customer Number"
+              placeholder="Wallet ID"
               onPressEnter={handleSearch}
               onChange={handleSearchTextValue}
             />

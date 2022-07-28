@@ -62,7 +62,7 @@ const Login: React.FC<{}> = () => {
             <div className={classes.container}>
                 <main className={classes.main}>
                 <h1 className={classes.title}>
-                    Login Form
+                    Login
                 </h1>
             <Card>
                 <form className={classes.form} onSubmit={submitHandler}>

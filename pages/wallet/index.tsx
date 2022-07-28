@@ -84,8 +84,17 @@ export default function Home() {
 
       console.log('response', response)
       
+      const hotelId = typeof localStorage !== 'undefined'
+        ? localStorage.getItem('hotelId')
+        : ''
+
+      const qr = {
+        ...response.data,
+        hotelId,
+      }
+
       setTabs('qr')
-      setQrValue(JSON.stringify(response.data))
+      setQrValue(JSON.stringify(qr))
       // setIsModalVisible(false)
 
     }).catch(error => {

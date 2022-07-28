@@ -1,5 +1,5 @@
 import React from 'react'
-import QrReader from 'react-qr-reader';
+import dynamic from 'next/dynamic';
 import Table from 'antd/lib/table'
 import Input from 'antd/lib/input'
 import Button from 'antd/lib/button'
@@ -8,6 +8,8 @@ import Form from 'antd/lib/form'
 import Result from 'antd/lib/result'
 import { axiosInstance } from '../../common/axios'
 import styles from '../../styles/Home.module.css'
+
+const QrReader = dynamic(() => import('react-qr-reader'), { ssr: false })
 
 export default function ThirdParty() {
   const [ form ] = Form.useForm();

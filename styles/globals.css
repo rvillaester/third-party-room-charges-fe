@@ -59,6 +59,13 @@ a {
   margin-bottom: 20px;
 }
 
+.wallet-qr-scan.display {
+  display: block;
+}
+
+.wallet-qr-scan {
+  display: none;
+}
 
 
 /* @media (prefers-color-scheme: dark) {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { QrReader } from 'react-qr-reader'
+import QrReader from 'react-qr-reader';
 import Table from 'antd/lib/table'
 import Input from 'antd/lib/input'
 import Button from 'antd/lib/button'
@@ -54,6 +54,12 @@ export default function ThirdParty() {
   const [ filterDataSoure, setFilterDataSource ] = React.useState(dataSource)
 
   const [isModalVisible, setIsModalVisible] = React.useState(false)
+
+  const [ walletId, setWalletId ] = React.useState('') 
+
+  const [ formValues, setFormValues ] = React.useState({})
+
+  const [qrResult , setQrResult] = React.useState({})
 
   const handleSearchCustomerTextValue = (event: React.ChangeEvent<HTMLInputElement>) => {
   
@@ -155,18 +161,27 @@ export default function ThirdParty() {
 
   }
 
-  const handleQrResult = (result: any, error: any) => {
-
+  const handleQrResult = (result: any) => {
+    console.log('result', result)
     if(result) {
-      console.log('resultqr', result)
-    } else {
-      console.log('errorqr', error)
+      setQrResult(JSON.parse(result))
+      form.setFieldsValue(JSON.parse(result))
+      console.log('tabsQRResult', tabs)
+      setTabs('form')
     }
-    
+
   }
 
   const handleScanQr = () => {
     setTabs('qr')
+  }
+
+  const handleFormValuesChange = (values: any) => {
+    setFormValues(values)
+  }
+
+  const handleScanError = (error: any) => {
+    console.log('error', error)
   }
 
   React.useEffect(() => {
@@ -192,6 +207,9 @@ export default function ThirdParty() {
   }, [dataSource])
 
   const partnerName = typeof localStorage !== 'undefined' ? localStorage.getItem('partnerName') : ''
+  const qrTab = tabs === 'qr' ? <QrReader onScan={handleQrResult} onError={handleScanError} /> : ''
+
+  console.log('tabs', tabs)
 
   return (
     <div className={styles.container}>
@@ -230,7 +248,7 @@ export default function ThirdParty() {
 
         </div>
         <Table dataSource={filterDataSoure} columns={columns} />
-        <Modal
+        {isModalVisible && (<Modal
           title="Create Transaction"
           className="transaction-modal"
           visible={isModalVisible}
@@ -245,6 +263,7 @@ export default function ThirdParty() {
               <Form
               form={form}
               layout="vertical"
+              onValuesChange={handleFormValuesChange}
               onFinish={handleSubmitCapture}
             >
               
@@ -253,7 +272,7 @@ export default function ThirdParty() {
               </Form.Item>
 
               <Form.Item name="walletId" label="Wallet ID" rules={[{ required: true }]}>
-                <Input placeholder="Wallet ID" />
+                  <Input placeholder="Wallet ID" />
               </Form.Item>
 
               <Form.Item name="receiptNumber" label="Receipt Number" rules={[{ required: true }]}>
@@ -276,14 +295,13 @@ export default function ThirdParty() {
           </React.Fragment>
           )}
 
-          {
+
+          {qrTab}
+          {/* {
             tabs === 'qr' && (
-              <QrReader
-                onResult={handleQrResult}
-                constraints={{ facingMode: 'user' }}
-              />
+              <QrReader onResult={handleQrResult} constraints={{ facingMode: 'environment' }} />
             )
-          }
+          } */}
 
           {tabs === 'success' && (
             <Result
@@ -293,7 +311,7 @@ export default function ThirdParty() {
             />
           )}
           
-        </Modal>
+        </Modal>)}
       </main>
     </div>
   )

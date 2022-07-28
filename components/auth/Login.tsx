@@ -7,14 +7,14 @@ import classes from "./Login.module.css"
 
 const Login: React.FC<{}> = () => {
 
-    const userNameInputRef = useRef();
-    const passwordInputRef = useRef();
+    const userNameInputRef = useRef<HTMLInputElement>(null);
+    const passwordInputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
 
     const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         let url = constructAPIUrl('auth/login');
-        let username = userNameInputRef.current.value;
+        let username = userNameInputRef?.current?.value;
         let response = await fetch(url, {
             headers: {
                 'Content-Type': 'application/json'
@@ -22,7 +22,7 @@ const Login: React.FC<{}> = () => {
             method: 'POST',
             body: JSON.stringify({
                 username: username,
-                password: passwordInputRef.current.value,
+                password: passwordInputRef?.current?.value,
             })
         })
 
@@ -46,13 +46,11 @@ const Login: React.FC<{}> = () => {
                 localStorage.setItem('partnerName', partnerName);
 
             }
-
-            if(username === 'hotel') {
-                router.push('/');
-            } else {
+            if(role == 'partner'){
                 router.push('/third-party')
+            } else {
+                router.push('/');
             }
-
         }
     };
 
